@@ -3,10 +3,22 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv/config');
 const postsRoute = require('./routes/posts');
+const registerRoute = require('./routes/register');
+const loginRoute = require('./routes/login');
+const { notFound, errorHandler } = require('./middlewares/errorMiddle');
 const app = express();
 
 //middleware
+
 app.use(cors());
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -14,10 +26,15 @@ app.use(
   })
 );
 app.use('/posts', postsRoute);
+app.use('/register', registerRoute);
+app.use('/login', loginRoute);
 
 app.get('/', (req, res) => {
   res.send('hey there');
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 //db connection
 mongoose
@@ -34,6 +51,8 @@ mongoose
     console.log('not connected' + err);
   });
 
-app.listen(8000, () => {
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
   console.log('server up at 8000');
 });
