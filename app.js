@@ -2,9 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv/config');
-const postsRoute = require('./routes/posts');
 const registerRoute = require('./routes/register');
 const loginRoute = require('./routes/login');
+const dmessageRoute = require('./routes/dmessages');
 const { notFound, errorHandler } = require('./middlewares/errorMiddle');
 const app = express();
 
@@ -25,13 +25,10 @@ app.use(
     extended: true,
   })
 );
-app.use('/posts', postsRoute);
+
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
-
-app.get('/', (req, res) => {
-  res.send('hey there');
-});
+app.use('/dmessages', dmessageRoute);
 
 app.use(notFound);
 app.use(errorHandler);
