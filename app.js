@@ -25,7 +25,9 @@ app.use(
     extended: true,
   })
 );
-
+app.use('/', (req, res) => {
+  res.send('hello');
+});
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 app.use('/dmessages', dmessageRoute);
